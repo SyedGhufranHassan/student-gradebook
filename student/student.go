@@ -10,7 +10,7 @@ import (
 
 var Gradebook = make(map[string][]int)
 
-// AddStudent validates and adds a student to the gradebook
+
 func AddStudent(name string, grades []int) error {
 	if name == "" {
 		return errors.New("student name cannot be empty")
@@ -27,7 +27,7 @@ func AddStudent(name string, grades []int) error {
 	return nil
 }
 
-// DeleteStudent removes a student if present
+
 func DeleteStudent(name string) bool {
 	if _, exists := Gradebook[name]; exists {
 		delete(Gradebook, name)
@@ -52,7 +52,7 @@ func GetAverageValue(name string) (float64, bool) {
 	return 0, false
 }
 
-// ParseGrades converts comma-separated string into []int
+
 func ParseGrades(input string) ([]int, error) {
 	parts := strings.Split(input, ",")
 	var grades []int
