@@ -12,5 +12,4 @@ func ReadLine(prompt string) string {
 	print(prompt)
 	input, _ := Reader.ReadString('\n')
 	return strings.TrimSpace(input)
-
 }

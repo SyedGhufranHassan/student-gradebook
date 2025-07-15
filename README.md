@@ -11,6 +11,8 @@ A simple RESTful API built in Go using the Chi router to manage student records 
 - 📋 List all students with their grades  
 - ❌ Delete a student record by name  
 - 🌐 RESTful API with clean routing using Go-Chi  
+- 🛡️ Proper validation for student name and grades  
+- 🧠 Grade parsing function (`ParseGrades`) included in logic
 
 ---
 
@@ -19,13 +21,12 @@ A simple RESTful API built in Go using the Chi router to manage student records 
 ```
 student-gradebook/
 ├── README.md
-├── go.mod                 # Go module definition
-├── main.go                # Web server with Chi HTTP routes
-├── student/               # Gradebook logic and types
-│   ├── student.go         # Core logic for grade management
+├── go.mod
+├── main.go                 # Web server with Chi HTTP routes
+├── reader.go              # Optional CLI helper (not used in API)
+├── student/               
+│   ├── student.go         # Gradebook logic + ParseGrades
 │   └── student_types.go   # Student struct
-└── utils/                 # (Optional) grade parser
-    └── parse.go
 ```
 
 ---
@@ -35,11 +36,11 @@ student-gradebook/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/SyedGhufranHassan/student-gradebook.git
+git clone https://github.com/your-username/student-gradebook.git
 cd student-gradebook
 ```
 
-### 2. Initialize Go Modules & Install Dependencies
+### 2. Initialize Go Modules
 
 ```bash
 go mod tidy
@@ -51,8 +52,8 @@ go mod tidy
 go run main.go
 ```
 
-The server will start at:  
-📍 `http://localhost:8080`
+📍 The server will start at:  
+http://localhost:8080
 
 ---
 
@@ -67,13 +68,13 @@ The server will start at:
 
 ---
 
-## 🧪 Example API Usage
+## 🧪 Example `curl` Commands
 
 ### ➕ Add Student
 ```bash
 curl -X POST http://localhost:8080/student \
   -H "Content-Type: application/json" \
-  -d '{"name": "Alice", "grades": [90, 85, 78]}' 
+  -d '{"name": "Ghufran", "grades": [90, 85, 78]}'
 ```
 
 ### 📊 Get Average Grade
@@ -97,12 +98,14 @@ curl -X DELETE http://localhost:8080/student/Ghufran/delete
 
 - **Language:** Go (Golang)
 - **Router:** [Chi](https://github.com/go-chi/chi)
-- **Standard Libraries:** `net/http`, `encoding/json`, `fmt`, `strings`,`bufio`, `os`, etc.
+- **Standard Libraries:** `net/http`, `encoding/json`, `fmt`, `strings`, `strconv`
 
 ---
 
 ## 📌 Notes
 
-- Data is stored in memory using Go maps. All records are lost when the app restarts.
-- Ideal for learning RESTful APIs and Go web development.
+- Data is stored **in memory** using a Go map. All records are lost when the app restarts.
+- This project is great for learning REST APIs, Go structs, slices, and validation.
+
+---
 

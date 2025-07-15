@@ -17,7 +17,8 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome to the API of Student Gradebook."))
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"message": "Welcome to the API of Student Gradebook."}`))
 	})
 
 	r.Post("/student", addStudent)
@@ -25,37 +26,53 @@ func main() {
 	r.Get("/student/{name}/average", getAverage)
 	r.Delete("/student/{name}/delete", deleteStudent)
 
-	fmt.Println("Server is running on exactly http://localhost:8080")
-
+	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", r)
 }
 
 func addStudent(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var s student.Student
 	if err := json.NewDecoder(r.Body).Decode(&s); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
+		http.Error(w, `{"error": "Invalid request body"}`, http.StatusBadRequest)
 		return
 	}
-	student.AddStudent(s.Name, s.Grades)
-	w.Write([]byte("Student added"))
+
+	if err := student.AddStudent(s.Name, s.Grades); err != nil {
+		http.Error(w, fmt.Sprintf(`{"error": "%s"}`, err.Error()), http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"message": "Student added successfully"})
 }
 
 func getAverage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	name := chi.URLParam(r, "name")
 	avg, found := student.GetAverageValue(name)
+
 	if !found {
-		http.Error(w, "Student not found", http.StatusNotFound)
+		http.Error(w, `{"error": "Student not found or no grades"}`, http.StatusNotFound)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]interface{}{"average": avg})
+
+	json.NewEncoder(w).Encode(map[string]float64{"average": avg})
 }
 
 func listStudents(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(student.Gradebook)
 }
 
 func deleteStudent(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	name := chi.URLParam(r, "name")
-	student.DeleteStudent(name)
-	w.Write([]byte("Student deleted"))
+	if success := student.DeleteStudent(name); success {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Student deleted successfully"})
+	} else {
+		http.Error(w, `{"error": "Student not found"}`, http.StatusNotFound)
+	}
 }
