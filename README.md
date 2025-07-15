@@ -1,6 +1,6 @@
-# 📚 Student Gradebook (Web API using Go + Chi)
+# 📚 Student Gradebook (Web API using Go + Chi + Swagger)
 
-A simple RESTful API built in Go using the Chi router to manage student records and grades. Users can add students, view their average grade, list all students, and delete student records—all via HTTP endpoints.
+A simple RESTful API built in Go using the Chi router to manage student records and grades. Enhanced with Swagger documentation using **Swaggo**.
 
 ---
 
@@ -11,8 +11,7 @@ A simple RESTful API built in Go using the Chi router to manage student records 
 - 📋 List all students with their grades  
 - ❌ Delete a student record by name  
 - 🌐 RESTful API with clean routing using Go-Chi  
-- 🛡️ Proper validation for student name and grades  
-- 🧠 Grade parsing function (`ParseGrades`) included in logic
+- 📄 Swagger-based API documentation with interactive UI
 
 ---
 
@@ -22,21 +21,35 @@ A simple RESTful API built in Go using the Chi router to manage student records 
 student-gradebook/
 ├── README.md
 ├── go.mod
-├── main.go                 # Web server with Chi HTTP routes
-├── reader.go              # Optional CLI helper (not used in API)
-├── student/               
-│   ├── student.go         # Gradebook logic + ParseGrades
+├── go.sum
+├── main.go                 # Web server and routes
+├── docs/                  # Auto-generated Swagger docs
+│   ├── docs.go
+│   ├── swagger.json
+│   └── swagger.yaml
+├── student/
+│   ├── student.go         # Business logic and validation
 │   └── student_types.go   # Student struct
+└── student-gradebook
 ```
 
 ---
 
-## 📦 Installation & Running
+## 🧰 Tech Stack
+
+- **Language**: Go (Golang)
+- **Router**: [Chi](https://github.com/go-chi/chi)
+- **Docs**: [Swaggo/Swagger](https://github.com/swaggo/swag)
+- **Format**: JSON APIs
+
+---
+
+## 🔧 Setup & Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/student-gradebook.git
+git clone https://github.com/yourusername/student-gradebook.git
 cd student-gradebook
 ```
 
@@ -46,31 +59,48 @@ cd student-gradebook
 go mod tidy
 ```
 
-### 3. Run the Server
+### 3. Install Swag CLI (if not installed)
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+### 4. Generate Swagger Documentation
+
+```bash
+swag init
+```
+
+### 5. Run the Server
 
 ```bash
 go run main.go
 ```
 
-📍 The server will start at:  
-http://localhost:8080
+Server will start at:
+
+```
+📍 http://localhost:8080
+```
 
 ---
 
-## 🌐 API Endpoints
+## 🌐 Swagger API Docs
 
-| Method | Endpoint                      | Description                    |
-|--------|-------------------------------|--------------------------------|
-| POST   | `/student`                    | Add a new student              |
-| GET    | `/student/{name}/average`     | Get average grade for student  |
-| GET    | `/students`                   | List all students              |
-| DELETE | `/student/{name}/delete`      | Delete a student               |
+Visit Swagger UI at:
+
+```
+http://localhost:8080/swagger/index.html
+```
+
+Here you can interact with the API (try requests, view schema, etc.).
 
 ---
 
-## 🧪 Example `curl` Commands
+## 🧪 Example API Usage (cURL)
 
 ### ➕ Add Student
+
 ```bash
 curl -X POST http://localhost:8080/student \
   -H "Content-Type: application/json" \
@@ -78,34 +108,28 @@ curl -X POST http://localhost:8080/student \
 ```
 
 ### 📊 Get Average Grade
+
 ```bash
 curl http://localhost:8080/student/Ghufran/average
 ```
 
 ### 📋 List All Students
+
 ```bash
 curl http://localhost:8080/students
 ```
 
 ### ❌ Delete Student
+
 ```bash
 curl -X DELETE http://localhost:8080/student/Ghufran/delete
 ```
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Language:** Go (Golang)
-- **Router:** [Chi](https://github.com/go-chi/chi)
-- **Standard Libraries:** `net/http`, `encoding/json`, `fmt`, `strings`, `strconv`
-
----
-
 ## 📌 Notes
 
-- Data is stored **in memory** using a Go map. All records are lost when the app restarts.
-- This project is great for learning REST APIs, Go structs, slices, and validation.
-
----
+- ⚠️ Data is stored in-memory. Restarting the app clears all student records.
+- 🧪 Swagger documentation is auto-generated using Go code annotations.
+- This is a lightweight project meant for learning REST APIs in Go.
 

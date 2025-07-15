@@ -1,0 +1,116 @@
+basePath: /
+definitions:
+  student.Student:
+    properties:
+      grades:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A RESTful API to manage student grades using Go and Chi
+  title: Student Gradebook API
+  version: "1.0"
+paths:
+  /student:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Student object
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/student.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add a new student
+      tags:
+      - student
+  /student/{name}/average:
+    get:
+      parameters:
+      - description: Student name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: number
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get average grade of a student
+      tags:
+      - student
+  /student/{name}/delete:
+    delete:
+      parameters:
+      - description: Student name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a student
+      tags:
+      - student
+  /students:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                type: integer
+              type: array
+            type: object
+      summary: List all students
+      tags:
+      - student
+swagger: "2.0"

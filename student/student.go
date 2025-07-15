@@ -1,5 +1,4 @@
 package student
-package student
 
 import (
 	"errors"
@@ -9,7 +8,6 @@ import (
 )
 
 var Gradebook = make(map[string][]int)
-
 
 func AddStudent(name string, grades []int) error {
 	if name == "" {
@@ -27,7 +25,6 @@ func AddStudent(name string, grades []int) error {
 	return nil
 }
 
-
 func DeleteStudent(name string) bool {
 	if _, exists := Gradebook[name]; exists {
 		delete(Gradebook, name)
@@ -36,7 +33,6 @@ func DeleteStudent(name string) bool {
 	return false
 }
 
-// GetAverageValue returns average grade if student exists and has grades
 func GetAverageValue(name string) (float64, bool) {
 	if grades, exists := Gradebook[name]; exists {
 		if len(grades) == 0 {
@@ -51,7 +47,6 @@ func GetAverageValue(name string) (float64, bool) {
 	}
 	return 0, false
 }
-
 
 func ParseGrades(input string) ([]int, error) {
 	parts := strings.Split(input, ",")
